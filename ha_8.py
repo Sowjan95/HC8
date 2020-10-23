@@ -20,6 +20,9 @@ airbnb.drop(['host_id','host_name'], axis=1, inplace=True)
 boro_group = airbnb.groupby(['neighbourhood_group'])
 bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
 
+#group our neighborhoods
+my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])] 
+
 #number of listings
 print("Number of listings in Bronx: ", len(bronx))
 

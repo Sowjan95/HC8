@@ -25,17 +25,51 @@ bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
 #group our neighborhoods
 my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])] 
 
+#COMPARING BRONX, MY_BRONX, AND AIRBNB; NO GRAPHS
+
 #number of listings
+print("Number of listings in all boroughs: ", len(airbnb))
 print("Number of listings in Bronx: ", len(bronx))
 print("Number of listings in our Bronx neighborhoods: ", len(my_bronx))
 
-#mean price of Bronx listings
-print("Mean price of listings in Bronx: ", bronx['price'].mean())
-print("Mean price of listings in our Bronx neighborhoods: ", my_bronx['price'].mean())
+#price of listings
+#AIRBNB
+print("\nPrice stats in all boroughs:")
+print("Mean: ", airbnb['price'].mean())
+print("Max: ", airbnb['price'].max())
+print("Min: ", airbnb['price'].min())
+#BRONX
+print("\nPrice stats in all Bronx neighborhoods:")
+print("Mean: ", bronx['price'].mean())
+print("Max: ", bronx['price'].max())
+print("Min: ", bronx['price'].min())
+#MY_BRONX
+print("\nPrice stats in our Bronx neighborhoods:")
+print("Mean: ", my_bronx['price'].mean())
+print("Max: ", my_bronx['price'].max())
+print("Min: ", my_bronx['price'].min())
 
+#availability_365
+#AIRBNB
+print("\navailability_365 stats in all boroughs:")
+print("Mean: ", airbnb['availability_365'].mean())
+print("Max: ", airbnb['availability_365'].max())
+print("Min: ", airbnb['availability_365'].min())
+#BRONX
+print("\navailability_365 stats in all Bronx neighborhoods:")
+print("Mean: ", bronx['availability_365'].mean())
+print("Max: ", bronx['availability_365'].max())
+print("Min: ", bronx['availability_365'].min())
+#MY_BRONX
+print("\navailability_365 stats in our Bronx neighborhoods:")
+print("Mean: ", my_bronx['availability_365'].mean())
+print("Max: ", my_bronx['availability_365'].max())
+print("Min: ", my_bronx['availability_365'].min())
+
+
+#VISUALIZING DATA
 
 #mean price of listings in each neighborhood in Bronx
-
 bronx_neighborhoods = bronx.groupby(['neighbourhood'])  #In all Bronx neighborhoods
 bronx_neighborhoods['price'].mean().plot.bar()
 plt.ylabel('Price')
@@ -68,4 +102,5 @@ fig1.savefig('numReviewsMyBronxNeighborhoods.png')
 
 #printing number of reviews in each neighborhood in Bronx
 my_bronx_stats = my_bronx.describe()
-print("Statistics for number_of_reviews in our bronx neighborhoods:\n", my_bronx_stats['number_of_reviews'])
+#print("Statistics for number_of_reviews in our bronx neighborhoods:\n", my_bronx_stats['number_of_reviews'])
+#print("Statistics for availability_365 in our bronx neighborhoods:\n", my_bronx_stats['availability_365'])

@@ -100,6 +100,7 @@ plt.ylabel('Number of Reviews')
 fig1 = plt.gcf()
 fig1.savefig('numReviewsMyBronxNeighborhoods.png')
 
+
 #printing number of reviews in each neighborhood in Bronx
 my_bronx_stats = my_bronx.describe()
 #print("Statistics for number_of_reviews in our bronx neighborhoods:\n", my_bronx_stats['number_of_reviews'])

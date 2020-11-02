@@ -1,4 +1,4 @@
-#HC7&8
+#HC8
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -24,6 +24,10 @@ bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
 
 #group our neighborhoods
 my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])] 
+kingsbridge = airbnb[airbnb['neighbourhood'] == 'Kingsbridge']
+allerton = airbnb[airbnb['neighbourhood'] == 'Allerton']
+concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
+fordham = airbnb[airbnb['neighbourhood'] == 'Fordham']
 
 #COMPARING BRONX, MY_BRONX, AND AIRBNB; NO GRAPHS
 
@@ -84,6 +88,38 @@ plt.ylabel('Price')
 fig1 = plt.gcf()
 fig1.savefig('meanPriceMyBronxNeighborhoods.png')
 #plt.clf()
+
+
+#############PIE CHARTS################################
+
+#ROOM TYPE
+
+# Some data
+labels = 'Private Room', 'Entire home/apt', 'Shared Room'
+krooms = kingsbridge['room_type'].value_counts()
+arooms = allerton['room_type'].value_counts()
+frooms = fordham['room_type'].value_counts()
+crooms = concourse['room_type'].value_counts()
+
+fracsK = krooms.unique()
+fracsA = arooms.unique()[0], arooms.unique()[1], 0
+fracsC = crooms.unique()[0], crooms.unique()[1], 0
+fracsF = frooms.unique()
+
+# Make figure and axes
+fig, axs = plt.subplots(2, 2)
+
+# A standard pie plot
+axs[0, 0].pie(fracsK, labels=labels, autopct='%1.1f%%', shadow=True)
+axs[0, 1].pie(fracsA, labels=labels, autopct='%1.1f%%', shadow=True)
+axs[1, 0].pie(fracsC, labels=labels, autopct='%1.1f%%', shadow=True)
+axs[1, 1].pie(fracsF, labels=labels, autopct='%1.1f%%', shadow=True)
+
+fig1 = plt.gcf()
+fig1.savefig('roomTypes.png')
+
+#########################################################
+
 
 
 #Somethings wrong with this one; can ask questions!!!

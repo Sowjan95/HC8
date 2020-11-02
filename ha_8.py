@@ -23,7 +23,7 @@ boro_group = airbnb.groupby(['neighbourhood_group'])
 bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
 
 #group our neighborhoods
-my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])] 
+my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])]
 kingsbridge = airbnb[airbnb['neighbourhood'] == 'Kingsbridge']
 allerton = airbnb[airbnb['neighbourhood'] == 'Allerton']
 concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
@@ -89,6 +89,12 @@ fig1 = plt.gcf()
 fig1.savefig('meanPriceMyBronxNeighborhoods.png')
 #plt.clf()
 
+boroughs = airbnb.groupby(['neighbourhood_group']) #compares availability amongst the 5 boroughs
+boroughs['availability_365'].mean().plot.bar()
+plt.ylabel('Availability')
+plt.gcf().subplots_adjust(bottom=0.25)
+fig1 = plt.gcf()
+fig1.savefig('availabilityFiveBoroughs.png')
 
 #############PIE CHARTS################################
 

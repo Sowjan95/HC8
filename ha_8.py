@@ -93,7 +93,6 @@ fig1.savefig('meanPriceMyBronxNeighborhoods.png')
 #############PIE CHARTS################################
 
 #ROOM TYPE
-
 # Some data
 labels = 'Private Room', 'Entire home/apt', 'Shared Room'
 krooms = kingsbridge['room_type'].value_counts()
@@ -117,6 +116,17 @@ axs[1, 1].pie(fracsF, labels=labels, autopct='%1.1f%%', shadow=True)
 
 fig1 = plt.gcf()
 fig1.savefig('roomTypes.png')
+
+#MYBRONX
+mbrooms = my_bronx['room_type'].value_counts()
+explode = (0, 0, 0.1)
+
+fig1, ax1 = plt.subplots()
+ax1.pie(mbrooms, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+fig1 = plt.gcf()
+fig1.savefig('roomTypesMB.png')
 
 #########################################################
 

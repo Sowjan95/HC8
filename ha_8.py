@@ -20,6 +20,8 @@ my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridg
 mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
 
 
+
+
 #PRINTING STATS FOR LISTINGS/PRICE
 
 #number of listings
@@ -33,16 +35,19 @@ print("\nPrice stats in all boroughs:")
 print("Mean: ", airbnb['price'].mean())
 print("Max: ", airbnb['price'].max())
 print("Min: ", airbnb['price'].min())
+
 #BRONX
 print("\nPrice stats in all Bronx neighborhoods:")
 print("Mean: ", bronx['price'].mean())
 print("Max: ", bronx['price'].max())
 print("Min: ", bronx['price'].min())
+
 #MY_BRONX
 print("\nPrice stats in our Bronx neighborhoods:")
 print("Mean: ", my_bronx['price'].mean())
 print("Max: ", my_bronx['price'].max())
 print("Min: ", my_bronx['price'].min())
+
 
 
 
@@ -89,6 +94,7 @@ plt.clf()
 
 
 
+
 #BOX PLOTS OF PRICE
 
 ##################
@@ -97,7 +103,32 @@ plt.clf()
 
 
 
-#PRICES FOR EACH ROOM TYPE PRINT
+
+#SCATTERPLOTS
+
+#PRICE V. CALCULATED_HOST_LISTINGS_COUNT
+my_bronx.plot.scatter(x="price", y="calculated_host_listings_count")
+fig1 = plt.gcf()
+fig1.savefig("mybronx_pricev.calculated_host_listings_count.png")
+
+bronx.plot.scatter(x="price", y="calculated_host_listings_count")
+fig2 = plt.gcf()
+fig2.savefig("bronx_pricev.calculated_host_listings_count.png")
+
+
+##################
+# CODE GOES HERE #
+##################
+
+
+
+
+#PRINTING STATS FOR PRICES FOR EACH ROOM TYPE
+
+print("\nprice stats for each room_type in all neighborhoods:")
+astats = airbnb.groupby('room_type').describe()
+print(astats['price'])
+
 print("\nprice stats for each room_type in bronx:")
 bstats = bronx.groupby('room_type').describe()
 print(bstats['price'])
@@ -107,13 +138,6 @@ mbstats = my_bronx.groupby('room_type').describe()
 print(mbstats['price'])
 
 
-#bs = bstats['price'].plot.box()
-#plt.title("prices of listings in bronx")
-#plt.show()
-
-#mbs = mbstats['price'].plot.box()
-#plt.title("prices of listings in my_bronx")
-#plt.show()
 
 
 #ROOM TYPE PIE CHARTS

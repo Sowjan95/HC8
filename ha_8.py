@@ -5,19 +5,11 @@ import matplotlib.pyplot as plt
 
 airbnb = pd.read_csv("AirBnB_NYC_2019.csv")
 
-#Using describe() function on entire data
-num_stats = airbnb.describe()
-#print("Statistics for 'price' column:\n",num_stats['price'])
-
-cat_stats = airbnb.describe(include=['O'])
-#print("Statistics for neighbourhood_group:\n", cat_stats['neighbourhood_group'])
-
 #Cleaning the data
 airbnb.fillna({'reviews_per_month':0, 'last_review':0},inplace=True)
 airbnb.fillna({'host_name':"", 'name':""},inplace=True)
 airbnb.drop(['host_id','host_name'], axis=1, inplace=True)
 
-################
 #Group by borough
 boro_group = airbnb.groupby(['neighbourhood_group'])
 bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
@@ -28,6 +20,8 @@ kingsbridge = airbnb[airbnb['neighbourhood'] == 'Kingsbridge']
 allerton = airbnb[airbnb['neighbourhood'] == 'Allerton']
 concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
 fordham = airbnb[airbnb['neighbourhood'] == 'Fordham']
+
+
 
 #COMPARING BRONX, MY_BRONX, AND AIRBNB; NO GRAPHS
 
@@ -71,28 +65,30 @@ print("Max: ", my_bronx['availability_365'].max())
 print("Min: ", my_bronx['availability_365'].min())
 
 
+
+
 #VISUALIZING DATA
 
 #mean price of listings in each neighborhood in Bronx
 bronx_neighborhoods = bronx.groupby(['neighbourhood'])  #In all Bronx neighborhoods
 bronx_neighborhoods['price'].mean().plot.bar()
 plt.ylabel('Price')
-plt.gcf().subplots_adjust(bottom=0.5)
+plt.gcf().subplots_adjust(bottom=0.4)
+plt.title('mean price of listings in bronx neighborhoods')
 fig1 = plt.gcf()
 fig1.savefig('meanPriceBronxNeighborhoods.png')
-#plt.clf()
 
 mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
 mybronx_neighborhoods['price'].mean().plot.bar()
 plt.ylabel('Price')
+plt.gcf().subplots_adjust(bottom=0.3)
+plt.title('mean price of listings in my_bronx neighborhoods')
 fig1 = plt.gcf()
 fig1.savefig('meanPriceMyBronxNeighborhoods.png')
-#plt.clf()
 
 #############PIE CHARTS################################
 
 #ROOM TYPE
-# Some data
 labels = 'Private Room', 'Entire home/apt', 'Shared Room'
 krooms = kingsbridge['room_type'].value_counts()
 arooms = allerton['room_type'].value_counts()
@@ -124,6 +120,7 @@ fig1, ax1 = plt.subplots()
 ax1.pie(mbrooms, explode=explode, labels=labels, autopct='%1.1f%%',
         shadow=True, startangle=90)
 ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title('room_type of listings in my_bronx')
 fig1 = plt.gcf()
 fig1.savefig('roomTypesMB.png')
 
@@ -135,10 +132,11 @@ fig1, ax1 = plt.subplots()
 ax1.pie(brooms, explode=explode, labels=labels, autopct='%1.1f%%',
         shadow=True, startangle=90)
 ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title('room_type of listings in bronx')
 fig1 = plt.gcf()
 fig1.savefig('roomTypesB.png')
 
-#CITY
+#AIRBNB
 rooms = airbnb['room_type'].value_counts()
 explode = (0, 0, 0.1)
 
@@ -146,6 +144,7 @@ fig1, ax1 = plt.subplots()
 ax1.pie(rooms, explode=explode, labels=labels, autopct='%1.1f%%',
         shadow=True, startangle=90)
 ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title('room_type of listings in airbnb')
 fig1 = plt.gcf()
 fig1.savefig('roomTypesA.png')
 

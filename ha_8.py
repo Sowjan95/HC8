@@ -13,13 +13,11 @@ airbnb.drop(['host_id','host_name'], axis=1, inplace=True)
 #Group by borough
 boro_group = airbnb.groupby(['neighbourhood_group'])
 bronx = airbnb[airbnb['neighbourhood_group'] == 'Bronx']
+bronx_neighborhoods = bronx.groupby(['neighbourhood'])
 
-#group our neighborhoods
+#Group by our neighborhoods
 my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])]
-kingsbridge = airbnb[airbnb['neighbourhood'] == 'Kingsbridge']
-allerton = airbnb[airbnb['neighbourhood'] == 'Allerton']
-concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
-fordham = airbnb[airbnb['neighbourhood'] == 'Fordham']
+mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
 
 
 #PRINTING STATS FOR LISTINGS/PRICE
@@ -57,26 +55,37 @@ plt.gcf().subplots_adjust(bottom=0.3)
 plt.title('mean price of listings in all boroughs')
 fig1 = plt.gcf()
 fig1.savefig('meanPriceBoroughs.png')
-plt.show()
+plt.clf()
 
 #BRONX
-bronx_neighborhoods = bronx.groupby(['neighbourhood'])  #In all Bronx neighborhoods
-bronx_neighborhoods['price'].mean().plot.bar()
+#make my_bronx neighborhoods stand out
+hoods_index = list(bronx['neighbourhood'].unique())
+hoods_index.sort()
+hoods_colors = list()
+for i in hoods_index:
+    if ((i == "Allerton") or (i == "Kingsbridge") or (i == "Concourse") or (i == "Fordham")):
+        hoods_colors.append("darkorange")
+    else:
+        hoods_colors.append("#1f77b4")
+hood = ["my_bronx"] #legend
+
+bronx_neighborhoods['price'].mean().plot.bar(color = hoods_colors)
 plt.ylabel('Price')
 plt.gcf().subplots_adjust(bottom=0.4)
 plt.title('mean price of listings in bronx neighborhoods')
+plt.legend(hood, loc=2) #legend
 fig1 = plt.gcf()
 fig1.savefig('meanPriceBronxNeighborhoods.png')
+plt.clf()
 
 #MY_BRONX
-mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
 mybronx_neighborhoods['price'].mean().plot.bar()
 plt.ylabel('Price')
 plt.gcf().subplots_adjust(bottom=0.3)
 plt.title('mean price of listings in my_bronx neighborhoods')
 fig1 = plt.gcf()
 fig1.savefig('meanPriceMyBronxNeighborhoods.png')
-
+plt.clf()
 
 
 
@@ -88,80 +97,28 @@ fig1.savefig('meanPriceMyBronxNeighborhoods.png')
 
 
 
+#PRICES FOR EACH ROOM TYPE PRINT
+print("\nprice stats for each room_type in bronx:")
+bstats = bronx.groupby('room_type').describe()
+print(bstats['price'])
+
+print("\nprice stats for each room_type in my_bronx:")
+mbstats = my_bronx.groupby('room_type').describe()
+print(mbstats['price'])
 
 
+#bs = bstats['price'].plot.box()
+#plt.title("prices of listings in bronx")
+#plt.show()
+
+#mbs = mbstats['price'].plot.box()
+#plt.title("prices of listings in my_bronx")
+#plt.show()
 
 
-#availability_365 stats
-#AIRBNB
-print("\navailability_365 stats in all boroughs:")
-print("Mean: ", airbnb['availability_365'].mean())
-print("Max: ", airbnb['availability_365'].max())
-print("Min: ", airbnb['availability_365'].min())
-#BRONX
-print("\navailability_365 stats in all Bronx neighborhoods:")
-print("Mean: ", bronx['availability_365'].mean())
-print("Max: ", bronx['availability_365'].max())
-print("Min: ", bronx['availability_365'].min())
-#MY_BRONX
-print("\navailability_365 stats in our Bronx neighborhoods:")
-print("Mean: ", my_bronx['availability_365'].mean())
-print("Max: ", my_bronx['availability_365'].max())
-print("Min: ", my_bronx['availability_365'].min())
+#ROOM TYPE PIE CHARTS
 
-
-
-
-
-#############PIE CHARTS################################
-
-#ROOM TYPE
 labels = 'Private Room', 'Entire home/apt', 'Shared Room'
-krooms = kingsbridge['room_type'].value_counts()
-arooms = allerton['room_type'].value_counts()
-frooms = fordham['room_type'].value_counts()
-crooms = concourse['room_type'].value_counts()
-
-fracsK = krooms.unique()
-fracsA = arooms.unique()[0], arooms.unique()[1], 0
-fracsC = crooms.unique()[0], crooms.unique()[1], 0
-fracsF = frooms.unique()
-
-# Make figure and axes
-fig, axs = plt.subplots(2, 2)
-
-# A standard pie plot
-axs[0, 0].pie(fracsK, labels=labels, autopct='%1.1f%%', shadow=True)
-axs[0, 1].pie(fracsA, labels=labels, autopct='%1.1f%%', shadow=True)
-axs[1, 0].pie(fracsC, labels=labels, autopct='%1.1f%%', shadow=True)
-axs[1, 1].pie(fracsF, labels=labels, autopct='%1.1f%%', shadow=True)
-
-fig1 = plt.gcf()
-fig1.savefig('roomTypes.png')
-
-#MYBRONX
-mbrooms = my_bronx['room_type'].value_counts()
-explode = (0, 0, 0.1)
-
-fig1, ax1 = plt.subplots()
-ax1.pie(mbrooms, explode=explode, labels=labels, autopct='%1.1f%%',
-        shadow=True, startangle=90)
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.title('room_type of listings in my_bronx')
-fig1 = plt.gcf()
-fig1.savefig('roomTypesMB.png')
-
-#BRONX
-brooms = bronx['room_type'].value_counts()
-explode = (0, 0, 0.1)
-
-fig1, ax1 = plt.subplots()
-ax1.pie(brooms, explode=explode, labels=labels, autopct='%1.1f%%',
-        shadow=True, startangle=90)
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.title('room_type of listings in bronx')
-fig1 = plt.gcf()
-fig1.savefig('roomTypesB.png')
 
 #AIRBNB
 rooms = airbnb['room_type'].value_counts()
@@ -174,29 +131,30 @@ ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 plt.title('room_type of listings in airbnb')
 fig1 = plt.gcf()
 fig1.savefig('roomTypesA.png')
+plt.clf()
 
-#########################################################
+#BRONX
+brooms = bronx['room_type'].value_counts()
+explode = (0, 0, 0.1)
 
-
-
-#Somethings wrong with this one; can ask questions!!!
-#number of reviews in each neighborhood in Bronx
-bronx_neighborhoods = bronx.groupby(['neighbourhood']) #In all Bronx neighborhoods
-bronx_neighborhoods['number_of_reviews'].plot.bar()
-plt.ylabel('Number of Reviews')
-plt.gcf().subplots_adjust(bottom=0.5)
-fig2 = plt.gcf()
-fig2.savefig('numReviewsBronxNeighborhoods.png')
-#plt.clf()
-
-mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
-mybronx_neighborhoods['number_of_reviews'].mean().plot.bar()
-plt.ylabel('Number of Reviews')
+fig1, ax1 = plt.subplots()
+ax1.pie(brooms, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title('room_type of listings in bronx')
 fig1 = plt.gcf()
-fig1.savefig('numReviewsMyBronxNeighborhoods.png')
+fig1.savefig('roomTypesB.png')
+plt.clf()
 
+#MY_BRONX
+mbrooms = my_bronx['room_type'].value_counts()
+explode = (0, 0, 0.1)
 
-#printing number of reviews in each neighborhood in Bronx
-my_bronx_stats = my_bronx.describe()
-#print("Statistics for number_of_reviews in our bronx neighborhoods:\n", my_bronx_stats['number_of_reviews'])
-#print("Statistics for availability_365 in our bronx neighborhoods:\n", my_bronx_stats['availability_365'])
+fig1, ax1 = plt.subplots()
+ax1.pie(mbrooms, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title('room_type of listings in my_bronx')
+fig1 = plt.gcf()
+fig1.savefig('roomTypesMB.png')
+plt.clf()

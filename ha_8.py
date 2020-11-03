@@ -1,4 +1,6 @@
-#HC8
+#Bronx Team: Sowjanya S., Jessica S., Shayaan M., Jason W.
+#Date: November 3, 2020
+#HC8 Code
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -18,7 +20,10 @@ bronx_neighborhoods = bronx.groupby(['neighbourhood'])
 #Group by our neighborhoods
 my_bronx = bronx[bronx['neighbourhood'].isin(['Fordham', 'Allerton', 'Kingsbridge', 'Concourse'])]
 mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
-
+kingsbridge = airbnb[airbnb['neighbourhood'] == 'Kingsbridge']
+allerton = airbnb[airbnb['neighbourhood'] == 'Allerton']
+concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
+fordham = airbnb[airbnb['neighbourhood'] == 'Fordham']
 
 
 
@@ -97,9 +102,52 @@ plt.clf()
 
 #BOX PLOTS OF PRICE
 
-##################
-# CODE GOES HERE #
-##################
+#AIRBNB
+fig1, ax = plt.subplots(1,3, figsize=(9,5))
+ax[0].set_ylim([0,400])
+ax[0].set_title('Aribnb Price \nDistribution')
+ax[0].boxplot(airbnb['price'],showfliers=False)
+
+#BRONX
+ax[1].set_ylim([0,400])
+ax[1].set_title('Bronx Price \nDistribution')
+ax[1].boxplot(bronx['price'],showfliers=False)
+
+#MY_BRONX
+ax[2].set_ylim([0,400])
+ax[2].set_title('My_Bronx Neighborhood \nPrice Distribution')
+ax[2].boxplot(my_bronx['price'],showfliers=False)
+
+fig1 = plt.gcf()
+fig1.savefig('3PriceBoxplots.png')
+
+plt.clf()
+
+# same three boxplots, but with zeros removed
+airbnbwithoutzeros = airbnb[airbnb['price'] != 0]
+bronxwithoutzeros = bronx[bronx['price'] != 0]
+my_bronxwithoutzeros = my_bronx[my_bronx['price'] != 0]
+
+#AIRBNB
+fig1, ax = plt.subplots(1,3, figsize=(9,5))
+ax[0].set_ylim([0,400])
+ax[0].set_title('Aribnb Price \nDistribution')
+ax[0].boxplot(airbnbwithoutzeros['price'],showfliers=False)
+
+#BRONX
+ax[1].set_ylim([0,400])
+ax[1].set_title('Bronx Price \nDistribution')
+ax[1].boxplot(bronxwithoutzeros['price'],showfliers=False)
+
+#MY_BRONX
+ax[2].set_ylim([0,400])
+ax[2].set_title('My_Bronx Neighborhood \nPrice Distribution')
+ax[2].boxplot(my_bronxwithoutzeros['price'],showfliers=False)
+
+fig1 = plt.gcf()
+fig1.savefig('3PriceBoxplotsNOZEROS.png')
+
+plt.clf()
 
 
 
@@ -107,18 +155,66 @@ plt.clf()
 #SCATTERPLOTS
 
 #PRICE V. CALCULATED_HOST_LISTINGS_COUNT
-my_bronx.plot.scatter(x="price", y="calculated_host_listings_count")
-fig1 = plt.gcf()
-fig1.savefig("mybronx_pricev.calculated_host_listings_count.png")
 
-bronx.plot.scatter(x="price", y="calculated_host_listings_count")
+#BRONX
+bronx.plot.scatter(x="calculated_host_listings_count", y="price")
 fig2 = plt.gcf()
+plt.title('price v. calculated_host_listings_count in bronx')
 fig2.savefig("bronx_pricev.calculated_host_listings_count.png")
+plt.clf()
+
+#MY_BRONX
+plt.scatter(fordham['calculated_host_listings_count'], fordham['price'], s=1, color='r')
+plt.scatter(allerton['calculated_host_listings_count'], allerton['price'], s=1, color='g')
+plt.scatter(kingsbridge['calculated_host_listings_count'], kingsbridge['price'], s=1, color='b')
+plt.scatter(concourse['calculated_host_listings_count'], concourse['price'], s=1, color='gray')
 
 
-##################
-# CODE GOES HERE #
-##################
+plt.ylabel("Price (in USD)")
+plt.xlabel("Calculated Host Listings Count")
+plt.title('price v. calculated_host_listings in my_bronx')
+hoods3 = ['fordham', 'allerton', 'kingsbridge', 'concourse']
+plt.legend(hoods3)
+fig1 = plt.gcf()
+fig1.savefig('PriceVscalculated_host_listingsMyBronxScatterplot.png')
+plt.clf()
+
+
+
+#PRICE V. MINIMUM_NIGHTS
+
+#BRONX
+price = bronx['price']
+minNights = bronx['minimum_nights']
+y = price
+x = minNights
+colors = "gray"
+
+plt.ylim(0,800)
+plt.xlim(0,125)
+
+plt.scatter(x, y, s=1, c=colors, alpha=0.5)
+plt.ylabel("Price (in USD)")
+plt.xlabel("Minimum Nights")
+plt.title('price v. minimum_nights in bronx')
+fig1 = plt.gcf()
+fig1.savefig('PriceVsMinNightsScatterplot.png')
+plt.clf()
+
+#MY_BRONX
+plt.scatter(fordham['minimum_nights'], fordham['price'], s=1, color='r')
+plt.scatter(allerton['minimum_nights'], allerton['price'], s=1, color='g')
+plt.scatter(kingsbridge['minimum_nights'], kingsbridge['price'], s=1, color='b')
+plt.scatter(concourse['minimum_nights'], concourse['price'], s=1, color='gray')
+
+plt.ylabel("Price (in USD)")
+plt.xlabel("Minimum Nights")
+plt.title('price v. minimum_nights in my_bronx')
+hoods2 = ['fordham', 'allerton', 'kingsbridge', 'concourse']
+plt.legend(hoods2)
+fig1 = plt.gcf()
+fig1.savefig('PriceVsMinNightsMyBronxScatterplot.png')
+plt.clf()
 
 
 
@@ -143,19 +239,6 @@ print(mbstats['price'])
 #ROOM TYPE PIE CHARTS
 
 labels = 'Private Room', 'Entire home/apt', 'Shared Room'
-
-#AIRBNB
-rooms = airbnb['room_type'].value_counts()
-explode = (0, 0, 0.1)
-
-fig1, ax1 = plt.subplots()
-ax1.pie(rooms, explode=explode, labels=labels, autopct='%1.1f%%',
-        shadow=True, startangle=90)
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.title('room_type of listings in airbnb')
-fig1 = plt.gcf()
-fig1.savefig('roomTypesA.png')
-plt.clf()
 
 #BRONX
 brooms = bronx['room_type'].value_counts()

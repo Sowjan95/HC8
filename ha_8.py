@@ -22,8 +22,7 @@ concourse = airbnb[airbnb['neighbourhood'] == 'Concourse']
 fordham = airbnb[airbnb['neighbourhood'] == 'Fordham']
 
 
-
-#COMPARING BRONX, MY_BRONX, AND AIRBNB; NO GRAPHS
+#PRINTING STATS FOR LISTINGS/PRICE
 
 #number of listings
 print("Number of listings in all boroughs: ", len(airbnb))
@@ -47,7 +46,53 @@ print("Mean: ", my_bronx['price'].mean())
 print("Max: ", my_bronx['price'].max())
 print("Min: ", my_bronx['price'].min())
 
-#availability_365
+
+
+#MEAN PRICE BAR PLOTS
+
+#AIRBNB
+boro_group['price'].mean().plot.bar()
+plt.ylabel('Price')
+plt.gcf().subplots_adjust(bottom=0.3)
+plt.title('mean price of listings in all boroughs')
+fig1 = plt.gcf()
+fig1.savefig('meanPriceBoroughs.png')
+plt.show()
+
+#BRONX
+bronx_neighborhoods = bronx.groupby(['neighbourhood'])  #In all Bronx neighborhoods
+bronx_neighborhoods['price'].mean().plot.bar()
+plt.ylabel('Price')
+plt.gcf().subplots_adjust(bottom=0.4)
+plt.title('mean price of listings in bronx neighborhoods')
+fig1 = plt.gcf()
+fig1.savefig('meanPriceBronxNeighborhoods.png')
+
+#MY_BRONX
+mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
+mybronx_neighborhoods['price'].mean().plot.bar()
+plt.ylabel('Price')
+plt.gcf().subplots_adjust(bottom=0.3)
+plt.title('mean price of listings in my_bronx neighborhoods')
+fig1 = plt.gcf()
+fig1.savefig('meanPriceMyBronxNeighborhoods.png')
+
+
+
+
+#BOX PLOTS OF PRICE
+
+##################
+# CODE GOES HERE #
+##################
+
+
+
+
+
+
+
+#availability_365 stats
 #AIRBNB
 print("\navailability_365 stats in all boroughs:")
 print("Mean: ", airbnb['availability_365'].mean())
@@ -67,24 +112,6 @@ print("Min: ", my_bronx['availability_365'].min())
 
 
 
-#VISUALIZING DATA
-
-#mean price of listings in each neighborhood in Bronx
-bronx_neighborhoods = bronx.groupby(['neighbourhood'])  #In all Bronx neighborhoods
-bronx_neighborhoods['price'].mean().plot.bar()
-plt.ylabel('Price')
-plt.gcf().subplots_adjust(bottom=0.4)
-plt.title('mean price of listings in bronx neighborhoods')
-fig1 = plt.gcf()
-fig1.savefig('meanPriceBronxNeighborhoods.png')
-
-mybronx_neighborhoods = my_bronx.groupby(['neighbourhood'])  #In our bronx neighborhoods
-mybronx_neighborhoods['price'].mean().plot.bar()
-plt.ylabel('Price')
-plt.gcf().subplots_adjust(bottom=0.3)
-plt.title('mean price of listings in my_bronx neighborhoods')
-fig1 = plt.gcf()
-fig1.savefig('meanPriceMyBronxNeighborhoods.png')
 
 #############PIE CHARTS################################
 
